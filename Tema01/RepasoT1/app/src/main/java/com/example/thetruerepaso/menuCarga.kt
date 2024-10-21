@@ -73,7 +73,10 @@ fun pantallaDeCarga(navController: NavHostController) {
         }
         Button(
             onClick = {
-                (navController.navigate("calculadora"))
+                if (nombre=="pedro" && password=="perro"){
+                    (navController.navigate("calculadora/$nombre"))
+                }
+
             }
         ) {
             Text("Entrar")
