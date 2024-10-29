@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = "pantalla1"
                 ) {
                     composable("pantalla1") { PantallaInicio(navController) }
+                    composable("pantalla2") { PantallaJuego(navController) }
                 }
             }
         }

@@ -30,10 +30,10 @@ fun PantallaInicio(navController: NavHostController) {
             null
         )
         Spacer(
-            Modifier.height(30.dp)
+            Modifier.height(50.dp)
         )
         Button(
-            modifier = Modifier.size(width = 80.dp, height = 60.dp),
+            modifier = Modifier.size(width = 100.dp, height = 60.dp),
             onClick = {
                 navController.navigate("pantalla2")
             }
