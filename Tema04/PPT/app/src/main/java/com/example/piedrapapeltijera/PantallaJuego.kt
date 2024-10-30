@@ -199,31 +199,19 @@ fun PantallaJuego(navController: NavHostController) {
 
 fun sacaGanador(elecJ1: Int, elecJPC: Int): String{
     var res = ""
-    if (elecJ1 == 1 && elecJPC == 1){
+    if (elecJ1 == 1 && elecJPC == 1 || elecJ1 == 2 && elecJPC == 2 || elecJ1 == 3 && elecJPC == 3){
         res="Empate"
-    } else if (elecJ1 == 1 && elecJPC == 2) {
+    } else if (elecJ1 == 1 && elecJPC == 2 || elecJ1 == 2 && elecJPC == 3 || elecJ1 == 3 && elecJPC == 1) {
         res = "Gana la máquina"
-    } else if (elecJ1 == 1 && elecJPC == 3) {
+    } else if (elecJ1 == 1 && elecJPC == 3 || elecJ1 == 2 && elecJPC == 1 || elecJ1 == 3 && elecJPC == 2) {
         res = "Has ganado"
-    } else if (elecJ1 == 2 && elecJPC == 1) {
-        res = "Has ganado"
-    } else if (elecJ1 == 2 && elecJPC == 2) {
-        res = "Empate"
-    } else if (elecJ1 == 2 && elecJPC == 3) {
-        res = "Gana la máquina"
-    } else if (elecJ1 == 3 && elecJPC == 1) {
-        res = "Gana la máquina"
-    } else if (elecJ1 == 3 && elecJPC == 2) {
-        res = "Has ganado"
-    } else if (elecJ1 == 3 && elecJPC == 3) {
-        res = "Empate"
     }
     return res
 }
 
 fun CalculaPc(): Int {
-    val random1 = (1..3).shuffled().last()
-    return random1
+    val random = (1..3).shuffled().last()
+    return random
 }
 
 @Composable
