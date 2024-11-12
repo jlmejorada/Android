@@ -1,5 +1,7 @@
 package com.example.piedrapapeltijeras
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.piedrapapeltijeras.MainActivity.Companion.basedatos
+import com.example.piedrapapeltijeras.MainActivity.Companion.todas
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.math.log
 
 
 @Composable
@@ -29,17 +38,19 @@ fun PantallaInicio(navController: NavHostController) {
     val image = painterResource(R.drawable.ppt)
     val nombre = remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    var existeJugador = false;
+    lateinit var todas: List<JugadorEntity>
 
-    Column (
+    Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
-    ){
-        Image (
+    ) {
+        Image(
             painter = image,
-            null
+            contentDescription = null
         )
-        OutlinedTextField(
+        TextField(
             value = nombre.value,
             onValueChange = { newText ->
                 nombre.value = newText
@@ -56,14 +67,16 @@ fun PantallaInicio(navController: NavHostController) {
         Button(
             modifier = Modifier.size(width = 100.dp, height = 60.dp),
             onClick = {
-                coroutineScope.launch {
-
-                    //if (nombre != JugadorDataBase.){
-                        JugadorDao.in
-                    //}
-
+                coroutineScope.launch(Dispatchers.IO) {
+                    Log.d(":::TAG", nombre.toString())
+                    var jugador: JugadorEntity? = basedatos.JugadorDao().getJugador(nombre.toString())
+                    if (jugador == null) {
+                        val NuevoJugador = JugadorEntity(nombre = nombre.toString())
+                        basedatos.JugadorDao().insertar(NuevoJugador)
+                    }
+                    Log.d(":::TAG", jugador.toString())
+                    navController.navigate("pantalla2")
                 }
-                navController.navigate("pantalla2")
             }
         ) {
             Text("JUGAR")
