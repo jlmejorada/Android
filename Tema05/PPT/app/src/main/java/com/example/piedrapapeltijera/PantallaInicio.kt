@@ -52,6 +52,22 @@ fun PantallaInicio(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(16.dp)
         )
+        /*
+        TextField(
+        value = nombre,
+        onValueChange = { newText ->
+            // Valida que el texto no esté vacío (opcional)
+            if (newText.all { it.isLetter() || it.isWhitespace() }) {
+                nombre = newText
+            }
+        },
+        label = { Text("Ingresa tu nombre") },
+        placeholder = { Text("Nombre") },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+        */
         Spacer(
             Modifier.height(50.dp)
         )
