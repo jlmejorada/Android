@@ -1,5 +1,6 @@
 package com.example.piedrapapeltijera
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,21 +25,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.SemanticsActions.OnClick
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.piedrapapeltijera.MainActivity.Companion.basedatos
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-//region Interfaz de juego
+
+
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun PantallaJuego(navController: NavHostController, nombre: String?) {
+    val coroutineScope = rememberCoroutineScope()
     var ctx = LocalContext.current
     var finPartida = ""
     var res by remember { mutableStateOf("") }
@@ -50,6 +64,11 @@ fun PantallaJuego(navController: NavHostController, nombre: String?) {
     val papel = painterResource(R.drawable.paper)
     val tijera = painterResource(R.drawable.shears)
     val incognita = painterResource(R.drawable.que)
+    LaunchedEffect(Unit) {
+        coroutineScope.launch{
+            JuegaPartida(nombre)
+        }
+    }
 
     /*
     LaunchedEffect(enabled) {
@@ -104,7 +123,9 @@ fun PantallaJuego(navController: NavHostController, nombre: String?) {
                 Text(text = "J1")
             }
             if (isDialogVisible) {
-                AyudaDialog(onDismiss = { isDialogVisible = false }, res, navController)
+                if (nombre != null) {
+                    AyudaDialog(onDismiss = { isDialogVisible = false }, res, navController, nombre)
+                }
             }
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -133,83 +154,120 @@ fun PantallaJuego(navController: NavHostController, nombre: String?) {
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                painter = piedra,
-                contentDescription = null,
+            Button (
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(10.dp)
-                    .clickable {
-                        elecJ1 = 1
-                        elecJPC = CalculaPc()
-                        finPartida = sacaGanador(elecJ1, elecJPC)
-                        if (finPartida == "Has ganado"){
-                            puntJ1++
-                        } else if (finPartida == "Gana la máquina"){
-                            puntPC++
+                    .size(80.dp)
+                    .shadow(4.dp, RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6200EA),
+                    contentColor = Color.White
+                ),
+                content = {
+                    Image(painter = piedra,
+                        contentDescription = null
+                    )
+                },
+                onClick = {
+                    elecJ1 = 1
+                    elecJPC = CalculaPc()
+                    finPartida = sacaGanador(elecJ1, elecJPC)
+                    if (finPartida == "Has ganado") {
+                        puntJ1++
+                        coroutineScope.launch{
+                            SumaPunto(nombre)
                         }
-                        if (puntJ1==3 ){
-                            res = "Has ganado!"
-                            isDialogVisible = true
-                        } else if (puntPC==3){
-                            res = "Has perdido!"
-                            isDialogVisible = true
-                        }
-                        Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                    } else if (finPartida == "Gana la máquina") {
+                        puntPC++
                     }
+                    if (puntJ1 == 3) {
+                        res = "Has ganado!"
+                        coroutineScope.launch{
+                            SumaPartida(nombre)
+                        }
+                        isDialogVisible = true
+                    } else if (puntPC == 3) {
+                        res = "Has perdido!"
+                        isDialogVisible = true
+                    }
+                    Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                }
             )
-            Image(
-                painter = papel,
-                contentDescription = null,
+            Button (
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(10.dp)
-                    .clickable {
-                        elecJ1 = 2
-                        elecJPC = CalculaPc()
-                        finPartida = sacaGanador(elecJ1, elecJPC)
-                        if (finPartida == "Has ganado"){
-                            puntJ1++
-                        } else if (finPartida == "Gana la máquina"){
-                            puntPC++
+                    .size(80.dp)
+                    .shadow(4.dp, RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6200EA),
+                    contentColor = Color.White
+                ),
+                content = {
+                    Image(painter = papel,
+                        contentDescription = null)
+                },
+                onClick = {
+                    elecJ1 = 2
+                    elecJPC = CalculaPc()
+                    finPartida = sacaGanador(elecJ1, elecJPC)
+                    if (finPartida == "Has ganado"){
+                        puntJ1++
+                        coroutineScope.launch{
+                            SumaPunto(nombre)
                         }
-                        if (puntJ1==3 ){
-                            res = "Has ganado!"
-                            isDialogVisible = true
-                        } else if (puntPC==3){
-                            res = "Has perdido!"
-                            isDialogVisible = true
-                        }
-                        Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                    } else if (finPartida == "Gana la máquina"){
+                        puntPC++
                     }
+                    if (puntJ1==3 ){
+                        res = "Has ganado!"
+                        coroutineScope.launch{
+                            SumaPartida(nombre)
+                        }
+                        isDialogVisible = true
+                    } else if (puntPC==3){
+                        res = "Has perdido!"
+                        isDialogVisible = true
+                    }
+                    Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                }
             )
-            Image(
-                painter = tijera,
-                contentDescription = null,
+            Button (
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(10.dp)
-                    .clickable {
-                        elecJ1 = 3
-                        elecJPC = CalculaPc()
-                        finPartida = sacaGanador(elecJ1, elecJPC)
-                        if (finPartida == "Has ganado"){
-                            puntJ1++
-                        } else if (finPartida == "Gana la máquina"){
-                            puntPC++
+                    .size(80.dp)
+                    .shadow(4.dp, RoundedCornerShape(12.dp)),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF6200EA),
+                    contentColor = Color.White
+                ),
+                content = {
+                    Image(painter = tijera,
+                        contentDescription = null)
+                },
+                onClick = {
+                    elecJ1 = 3
+                    elecJPC = CalculaPc()
+                    finPartida = sacaGanador(elecJ1, elecJPC)
+                    if (finPartida == "Has ganado"){
+                        puntJ1++
+                        coroutineScope.launch{
+                            SumaPunto(nombre)
                         }
-                        if (puntJ1==3 ){
-                            res = "Has ganado!"
-                            isDialogVisible = true
-                        } else if (puntPC==3){
-                            res = "Has perdido!"
-                            isDialogVisible = true
-                        }
-                        Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                    } else if (finPartida == "Gana la máquina"){
+                        puntPC++
                     }
+                    if (puntJ1==3 ){
+                        res = "Has ganado!"
+                        coroutineScope.launch{
+                            SumaPartida(nombre)
+                        }
+                        isDialogVisible = true
+                    } else if (puntPC==3){
+                        res = "Has perdido!"
+                        isDialogVisible = true
+                    }
+                    Toast.makeText(ctx, finPartida, Toast.LENGTH_SHORT).show()
+                }
             )
         }
     }
@@ -235,7 +293,7 @@ fun CalculaPc(): Int {
 }
 
 @Composable
-fun AyudaDialog(onDismiss: () -> Unit, res: String, navController: NavHostController) {
+fun AyudaDialog(onDismiss: () -> Unit, res: String, navController: NavHostController, nombre: String) {
     Dialog(onDismissRequest = onDismiss) {
         Column (
             verticalArrangement = Arrangement.Center,
@@ -256,8 +314,47 @@ fun AyudaDialog(onDismiss: () -> Unit, res: String, navController: NavHostContro
                     navController.navigate("pantalla1")
                 }
             ) {
-                Text("Volver al Inicio")
+                Text("Jugar con otro usuario")
+            }
+            Spacer(
+                Modifier.height(90.dp)
+            )
+            Button(
+                modifier = Modifier.size(width = 150.dp, height = 60.dp),
+                onClick = {
+                    navController.navigate("pantalla2/${nombre}")
+                }
+            ) {
+                Text("Volver a jugar")
+            }
+            Spacer(
+                Modifier.height(90.dp)
+            )
+            Button(
+                modifier = Modifier.size(width = 150.dp, height = 60.dp),
+                onClick = {
+                    navController.navigate("pantalla3")
+                }
+            ) {
+                Text("Puntuacion")
             }
         }
+    }
+}
+
+suspend fun SumaPunto(nombre: String?){
+    if (nombre != null) {
+            basedatos.JugadorDao().incrementaRondasGanadas(nombre = nombre)
+        }
+}
+
+suspend fun SumaPartida(nombre: String?){
+    if (nombre != null) {
+        basedatos.JugadorDao().incrementaPartidasGanadas(nombre = nombre)
+    }
+}
+suspend fun JuegaPartida(nombre: String?){
+    if (nombre != null) {
+        basedatos.JugadorDao().incrementaPartidasJugadas(nombre)
     }
 }

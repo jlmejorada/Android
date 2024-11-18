@@ -12,4 +12,5 @@ abstract class JugadorDataBase: RoomDatabase() {
     }
 
     abstract fun JugadorDao(): JugadorDao
+
 }

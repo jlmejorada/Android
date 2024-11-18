@@ -1,5 +1,6 @@
 package com.example.piedrapapeltijera
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -10,27 +11,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.piedrapapeltijera.MainActivity.Companion.basedatos
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PantallaInicio(navController: NavHostController) {
     val image = painterResource(R.drawable.ppt)
-    val nombre = remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf(TextFieldValue("")) }
     val coroutineScope = rememberCoroutineScope()
     Column (
         verticalArrangement = Arrangement.Center,
@@ -41,51 +49,50 @@ fun PantallaInicio(navController: NavHostController) {
             painter = image,
             null
         )
-        TextField(
-            value = nombre.value,
-            onValueChange = { newText ->
-                nombre.value = newText
-            },
-            label = { Text("Ingresa tu nombre") },
-            placeholder = { Text("Nombre") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+        OutlinedTextField(
+            value = nombre,
+            onValueChange = { nombre= it },
+            label = { Text("Jugador") },
+            placeholder = { Text("Jugador") },
+            singleLine = true,
         )
-        /*
-        TextField(
-        value = nombre,
-        onValueChange = { newText ->
-            // Valida que el texto no esté vacío (opcional)
-            if (newText.all { it.isLetter() || it.isWhitespace() }) {
-                nombre = newText
-            }
-        },
-        label = { Text("Ingresa tu nombre") },
-        placeholder = { Text("Nombre") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
-        */
         Spacer(
             Modifier.height(50.dp)
         )
-        Button(
-            modifier = Modifier.size(width = 100.dp, height = 60.dp),
+        Button (
             onClick = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    var jugador: JugadorEntity? = basedatos.JugadorDao().getJugador(nombre.toString())
-                    if (jugador == null) {
-                        val NuevoJugador = JugadorEntity(nombre = nombre.toString())
-                        basedatos.JugadorDao().insertar(NuevoJugador)
-                    }
-                    Log.d(":::TAG", jugador.toString())
+                coroutineScope.launch {
+
+                    btnLogin(nombre.text.toString(), navController)
                 }
-                navController.navigate("pantalla2/${nombre}")
-            }
-        ) {
-            Text("JUGAR")
+            },
+            Modifier
+                .width(140.dp)
+                .height(42.dp)
+        ){
+            Text("Entrar")
+        }
+    }
+
+
+}
+
+suspend fun btnLogin(nombre: String, navController: NavController){
+    if(nombre!= "" && nombre != null ){
+        LoginJugador(nombre)
+        navController.navigate("pantalla2/${nombre}")
+    }
+
+
+}
+private suspend fun LoginJugador(nombre: String) {
+    withContext(Dispatchers.IO) {
+        val jugador = basedatos.JugadorDao().getJugador(nombre)
+
+        if (jugador == null) {
+            val nuevoJugador = JugadorEntity(nombre = nombre)
+            basedatos.JugadorDao().insertar(nuevoJugador)
+            Log.d(TAG, nuevoJugador.nombre)
         }
     }
 }

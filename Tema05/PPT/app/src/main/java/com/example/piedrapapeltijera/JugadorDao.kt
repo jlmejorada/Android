@@ -22,4 +22,13 @@ interface JugadorDao {
 
     @Update
     suspend fun actualizar (jugador: JugadorEntity)
+
+    @Query("UPDATE Jugadores SET partidasJugadas = partidasJugadas + 1 WHERE nombre = :nombre")
+    suspend fun incrementaPartidasJugadas(nombre: String)
+
+    @Query("UPDATE Jugadores SET luchasGanadas = luchasGanadas + 1 WHERE nombre = :nombre")
+    suspend fun incrementaRondasGanadas(nombre: String)
+
+    @Query("UPDATE Jugadores SET partidasGanadas = partidasGanadas + 1 WHERE nombre = :nombre")
+    suspend fun incrementaPartidasGanadas(nombre: String)
 }

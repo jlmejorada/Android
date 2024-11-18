@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
                             backStackEntry.arguments?.getString("nombre")
                         )
                     }
+                    composable("pantalla3") { Puntuaciones(navController) }
                 }
             }
         }
