@@ -7,28 +7,21 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface JugadorDao {
-    @Query("SELECT * FROM Jugadores WHERE nombre = :nombre LIMIT 1")
-    suspend fun getScoreByUsername(nombre: String): JugadorEntity?
+interface ContactoDao {
 
-    @Query("SELECT * FROM Jugadores")
-    suspend fun getAll():List<JugadorEntity>
+    @Query("SELECT * FROM Contactos")
+    suspend fun getAll():List<ContactoEntity>
 
-    @Query("SELECT * FROM Jugadores WHERE nombre = :nombre LIMIT 1")
-    suspend fun getJugador(nombre: String): JugadorEntity?
+    @Query("SELECT * FROM Contactos WHERE nombre = :nombre LIMIT 1")
+    suspend fun getContactoNom(nombre: String): ContactoEntity?
+
+    @Query("SELECT * FROM Contactos WHERE id = :id LIMIT 1")
+    suspend fun getContactoID(id: Int): ContactoEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertar(jugador: JugadorEntity): Long
+    suspend fun insertar(contacto: ContactoEntity): Long
 
     @Update
-    suspend fun actualizar (jugador: JugadorEntity)
+    suspend fun actualizar (contacto: ContactoEntity)
 
-    @Query("UPDATE Jugadores SET partidasJugadas = partidasJugadas + 1 WHERE nombre = :nombre")
-    suspend fun incrementaPartidasJugadas(nombre: String)
-
-    @Query("UPDATE Jugadores SET luchasGanadas = luchasGanadas + 1 WHERE nombre = :nombre")
-    suspend fun incrementaRondasGanadas(nombre: String)
-
-    @Query("UPDATE Jugadores SET partidasGanadas = partidasGanadas + 1 WHERE nombre = :nombre")
-    suspend fun incrementaPartidasGanadas(nombre: String)
 }

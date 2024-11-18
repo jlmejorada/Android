@@ -11,11 +11,11 @@ room {
 }
 
 android {
-    namespace = "com.example.piedrapapeltijera"
+    namespace = "com.example.ContactosBDD"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.piedrapapeltijera"
+        applicationId = "com.example.ContactosBDD"
         minSdk = 29
         targetSdk = 35
         versionCode = 1

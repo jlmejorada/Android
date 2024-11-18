@@ -8,6 +8,6 @@ data class ContactoEntity(
     @PrimaryKey(autoGenerate = true)
     var id:Int = 0,
     var nombre:String = "",
-    var telefono:Int = 0,
-    var imagen:String ="oasdkmas"
+    var telefono:String = "",
+    var imagen:String ="contacto.png"
 )
