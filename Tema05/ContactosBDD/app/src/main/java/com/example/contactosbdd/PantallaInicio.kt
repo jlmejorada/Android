@@ -22,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.ContactosBDD.R
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,8 +41,8 @@ fun PantallaInicio(navController: NavHostController) {
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre= it },
-            label = { Text("Jugador") },
-            placeholder = { Text("Jugador") },
+            label = { Text("Usuario") },
+            placeholder = { Text("Usuario") },
             singleLine = true,
         )
         Spacer(
@@ -52,7 +51,7 @@ fun PantallaInicio(navController: NavHostController) {
         Button (
             onClick = {
                 coroutineScope.launch {
-                    navController.navigate("pantalla2/${nombre}")
+                    navController.navigate("pantalla2/${nombre.text}")
                 }
             },
             Modifier

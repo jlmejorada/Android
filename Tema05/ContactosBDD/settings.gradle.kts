@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ContactosBDD"
+rootProject.name = "ContactosBdd"
 include(":app")
  

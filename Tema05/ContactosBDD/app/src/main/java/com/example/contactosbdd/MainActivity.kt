@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import com.example.contactosbdd.ui.theme.ContactosBDDTheme
+import com.example.contactosbdd.ui.theme.ContactosBddTheme
 import kotlinx.coroutines.CoroutineScope
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         ).build()
         enableEdgeToEdge()
         setContent {
-            ContactosBDDTheme {
+            ContactosBddTheme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
                             backStackEntry.arguments?.getString("nombre")
                         )
                     }
-                    composable("pantalla3") { PantallaAñadirContactos(navController) }
                 }
             }
         }

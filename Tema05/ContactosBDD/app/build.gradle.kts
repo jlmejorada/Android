@@ -4,19 +4,21 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
+
 }
 
-room {
+room{
     schemaDirectory("$projectDir/schemas")
 }
 
+
 android {
-    namespace = "com.example.ContactosBDD"
+    namespace = "com.example.contactosbdd"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.ContactosBDD"
-        minSdk = 29
+        applicationId = "com.example.contactosbdd"
+        minSdk = 24
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -43,12 +45,6 @@ android {
     buildFeatures {
         compose = true
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
@@ -61,7 +57,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
