@@ -13,7 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 
 class MainActivity : ComponentActivity() {
     companion object {
-        lateinit var coroutine: CoroutineScope
         lateinit var basedatos: ContactoDataBase
     }
     override fun onCreate(savedInstanceState: Bundle?) {

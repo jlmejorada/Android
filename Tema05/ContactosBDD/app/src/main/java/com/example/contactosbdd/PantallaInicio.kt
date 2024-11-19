@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 
+//Tenemos una pantalla que recoge el nombre del usuario y la manda a la pantalla de contactos siguiente
 @Composable
 fun PantallaInicio(navController: NavHostController) {
     val image = painterResource(R.drawable.inicio)
