@@ -1,0 +1,44 @@
+gradle.kts	
+	plugins{
+		...
+		alias(libs.plugins.ksp)
+    		alias(libs.plugins.androidxRoom)
+	}
+	
+	room {
+    		schemaDirectory("$projectDir/schemas")
+	}
+
+	dependencies{
+		...
+		implementation(libs.androidx.room.runtime)
+    		implementation(libs.androidx.room.ktx)
+    		ksp(libs.androidx.room.compiler)
+	}
+	
+	
+
+fgxdfgsd
+
+
+
+
+libs.
+	[versions]
+		...
+		ksp = "2.0.0-1.0.21"
+		androidx-room = "2.6.1"
+	
+	[libraries]
+		...
+		androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+		androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
+		
+		androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
+		
+
+	[plugins]
+		...
+		ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+		androidxRoom = { id = "androidx.room", version.ref = "androidx-room" }
+	
