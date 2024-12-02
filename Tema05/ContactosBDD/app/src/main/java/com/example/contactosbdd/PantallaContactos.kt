@@ -53,6 +53,7 @@ import kotlinx.coroutines.withContext
 fun PantallaContactos(navController: NavHostController, nombre: String?) {
     var isDialogVisible by remember { mutableStateOf(false) }
     var contactos by remember { mutableStateOf<List<ContactoEntity>>(emptyList()) }
+
     if (isDialogVisible) {
         AyudaDialog(onDismiss = { isDialogVisible = false }, navController, nombre)
     }

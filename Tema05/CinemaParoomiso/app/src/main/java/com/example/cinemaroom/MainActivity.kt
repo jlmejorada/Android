@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,14 +26,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import com.example.cinemaroom.DAL.CinemaDataBase
 import com.example.cinemaroom.ui.theme.CinemaRoomTheme
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        lateinit var basedatos: CinemaDataBase
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+            basedatos = Room.databaseBuilder(
+                this, CinemaDataBase::class.java, "cine-db"
+            ).build()
             CinemaRoomTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // val navController = rememberNavController()

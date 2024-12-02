@@ -9,6 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 @Database(entities = [ClienteEntity::class, ConfiguracionEntity::class], version = 1)
 abstract class CinemaDataBase: RoomDatabase() {
 
+    abstract fun cinemaDao(): CinemaDao
+
     companion object {
         lateinit var coroutine: CoroutineScope
     }

@@ -15,15 +15,19 @@ interface CinemaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertarConfiguracion(configuracion: ConfiguracionEntity)
 
-    //UPDATES
-    @Update
-    suspend fun actualizarConfiguracion (configuracion: ConfiguracionEntity)
-
     //CONSULTA
     @Query("SELECT * FROM Configuracion Where Id = 1")
     suspend fun sacaConfiguracion():ConfiguracionEntity
 
-//
+    @Query("SELECT COUNT(*) as numCliente FROM clientes")
+    suspend fun cuantosClientes(): Int
+
+    @Query("SELECT COUNT(*) as numCliente FROM clientes WHERE salaElegida == :idSala ")
+    suspend fun cuantosClientesEnSala(idSala: Int): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun anadeCliente(cliente: ClienteEntity)
+
 //    @Query("SELECT * FROM Clientes")
 //    suspend fun getAll():List<ContactoEntity>
 //

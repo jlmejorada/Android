@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.cinemaroom.DAL.CinemaDao
+import com.example.cinemaroom.ENT.ConfiguracionEntity
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -101,11 +102,25 @@ fun PantallaConfiguracion(navController: NavHostController) {
                 .size(width = 150.dp, height = 60.dp),
             onClick = {
                 coroutineScope.launch {
-
+                    guardaConfiguracion(numSalas, numAsientos, precioPalomitas, navController)
                 }
             }
         ) {
             Text("Guardar Configuración", textAlign = TextAlign.Center)
         }
+    }
+}
+
+suspend fun guardaConfiguracion(sala: String, asientos: String, palomitas: String, navController: NavHostController) {
+    var conf : ConfiguracionEntity
+    if (sala!="0" && asientos!="0" && palomitas!="0"){
+        conf = ConfiguracionEntity(
+            id = 1,
+            numSalas = sala.toInt(),
+            numAsientos = asientos.toInt(),
+            precioPalomitas = palomitas.toFloat()
+        )
+        MainActivity.basedatos.cinemaDao().insertarConfiguracion(conf)
+        navController.navigate("pantalla1")
     }
 }
