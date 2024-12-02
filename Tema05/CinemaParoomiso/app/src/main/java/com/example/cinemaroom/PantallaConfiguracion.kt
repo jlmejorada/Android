@@ -19,6 +19,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,16 +37,15 @@ import com.example.cinemaroom.DAL.CinemaDao
 import com.example.cinemaroom.ENT.ConfiguracionEntity
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun PantallaConfiguracion(navController: NavHostController) {
+    LaunchedEffect(Unit) {
+        MainActivity.basedatos.cinemaDao().borraClientes()
+    }
     var numSalas by remember { mutableStateOf("0") }
     var numAsientos by remember { mutableStateOf("0") }
     var precioPalomitas by remember { mutableStateOf("0") }
     val coroutineScope = rememberCoroutineScope()
-    coroutineScope.launch {
-
-    }
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
